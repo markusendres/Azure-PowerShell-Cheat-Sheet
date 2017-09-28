@@ -1,5 +1,21 @@
 <# 
 =============================================================================
+Install PowerShell Azure
+=============================================================================
+#>
+
+# Installing items from the PowerShell Gallery requires the PowerShellGet 
+# module. Make sure you have the appropriate version of PowerShellGet and other 
+# system requirements. Run the following command to see if you have 
+# PowerShellGet installed on your system.
+Get-Module PowerShellGet -list | Select-Object Name,Version,Path
+
+# Install the Azure Resource Manager modules from the PowerShell Gallery
+Install-Module AzureRM
+
+
+<# 
+=============================================================================
 Connecting PowerShell Azure
 =============================================================================
 #>
@@ -21,12 +37,29 @@ Get-AzureRmContext
 
 <# 
 =============================================================================
-Working with Virtual Machines
+Listing Virtual Machines Information
 =============================================================================
 #>
 
 # List all VM's in the subscription
 Get-AzureRmVM
 
+# list all Resourse Groups
+Get-AzureRmResourceGroup
+
 # List all VM's in the subscription
 Get-AzureRmVM -ResourceGroupName $myResourceGroup
+
+# List the OS version of all Virtual Machines
+# By sancloud (https://gallery.technet.microsoft.com/How-to-retrieve-Azure-8acc709f)
+$VMs = Get-AzureRmVM 
+$vmlist = @() 
+$VMs | ForEach-Object {  
+    $VMObj = New-Object -TypeName PSObject 
+    $VMObj | Add-Member -MemberType Noteproperty -Name "VM Name" -Value $_.Name 
+    $VMObj | Add-Member -MemberType Noteproperty -Name "OS type" -Value $_.StorageProfile.ImageReference.Sku 
+    $vmlist += $VMObj 
+} 
+$vmlist 
+
+
