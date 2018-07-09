@@ -62,4 +62,17 @@ $VMs | ForEach-Object {
 } 
 $vmlist 
 
+<# 
+=============================================================================
+Listing Available VM types in Azure
+=============================================================================
+#>
+
+#List all VM types with details available in a region.
+Login-AzureRmAccount
+Select-AzureRmSubscription -SubscriptionName "$SubscriptionName"
+get-AzureRMVMSize -Location "UK South"
+
+
+
 
